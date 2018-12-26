@@ -14,7 +14,7 @@ print(cvx.calibrations["DEMO_CURVE"])
 # [0.30078125, 0.3984375, 0.5, 0.59765625, 0.69921875, 0.80078125, 0.8984375]
 # x
 # name=, description=
-# line_start=0, line_end=39
+# line_start=38, line_end=39
 # type=X_AXIS_PTS, unit=revs
 # value
 # [120.0, 200.0, 320.0, 400.0, 520.0, 600.0, 720.0]
