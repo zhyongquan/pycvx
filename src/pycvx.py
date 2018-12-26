@@ -88,16 +88,17 @@ class calibration(cvxobject):
                 #     plt.text(self.x.value[i], self.value[i], "{0},{1}".format(self.x.value[i], self.value[i]))
                 plt.show()
             elif self.type == "MAP":
-                X, Y = np.meshgrid(self.x.value, self.y.value)
+                X, Y = np.meshgrid(self.y.value, self.x.value)  # exchange for plot
                 nx = len(self.x.value)
                 ny = len(self.y.value)
-                Z = np.zeros((ny, nx))
-                for i in range(0, ny - 1):
-                    for j in range(0, nx - 1):
-                        Z[i, j] = self.value[i][j]
-                fig1 = plt.figure()
-                ax = Axes3D(fig1)
-                ax.plot_surface(X, Y, Z)
+                Z = np.zeros((nx, ny))
+                for i in range(0, nx):
+                    for j in range(0, ny):
+                        Z[i, j] = self.value[j][i]
+                fig = plt.figure()
+                ax = Axes3D(fig)
+                p = ax.plot_surface(X, Y, Z, rstride=1, cstride=1, cmap='rainbow')
+                fig.colorbar(p)
                 ax.set_title(self.name)
                 ax.set_xlabel(self.getlabel("x", self.x.name, self.x.unit))
                 ax.set_ylabel(self.getlabel("y", self.y.name, self.y.unit))
