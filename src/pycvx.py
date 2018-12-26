@@ -1,5 +1,6 @@
 # -*- coding:utf-8 -*-
 # Author: zhang yongquan
+# Email: zhyongquan@gmail.com
 # GitHub: https://github.com/zhyongquan
 
 import matplotlib.pyplot as plt
