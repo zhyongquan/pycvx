@@ -1,7 +1,9 @@
 from pycvx import cvxinfo
 
-cvx=cvxinfo()
+cvx = cvxinfo()
+
 cvx.read("../data/DEMO.CSV")
+# cvx.read("../data/DEMO.CSV")
 # find functions:2, calibrations:5, axises:0
 
 print(cvx.calibrations["DEMO_CURVE"])

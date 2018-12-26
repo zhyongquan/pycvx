@@ -1,3 +1,7 @@
+# -*- coding:utf-8 -*-
+# Author: zhang yongquan
+# GitHub: https://github.com/zhyongquan
+
 import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
@@ -28,6 +32,10 @@ class cvxobject(function):
     type = ""
     unit = ""
     value = []
+
+    def __init__(self, name):
+        super().__init__(name)
+        self.value = []
 
     def getlabel(self, axis, name, unit):
         if len(name) > 0 and len(unit) > 0:
@@ -62,6 +70,11 @@ class axis(cvxobject):
 class calibration(cvxobject):
     x = axis("")
     y = axis("")
+
+    def __init__(self, name):
+        super().__init__(name)
+        self.x = axis("")
+        self.y = axis("")
 
     def show(self):
         if self.type == "CURVE" or self.type == "MAP" or self.type == "VAL_BLK":
@@ -140,6 +153,9 @@ class cvxinfo:
             #         cal.y = ax
 
     def read(self, cvxfile):
+        self.functions.clear()
+        self.calibrations.clear()
+        self.axises.clear()
         line_count = 0
         with open(cvxfile, 'r') as file:
             # first line: Description Header
@@ -174,7 +190,6 @@ class cvxinfo:
                     elif len(txt) == 2 and len(txt[0]) == 0 and len(txt[1]) > 0:
                         # calibration block
                         cal = calibration(txt[1])
-                        cal.value = []
                         cal.line_start = line_count
                     elif txt[0] == "VALUE" or txt[0] == "CURVE" or txt[0] == "MAP" or txt[0] == "VAL_BLK":
                         cal.type = txt[0]
