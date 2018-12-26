@@ -1,5 +1,3 @@
-# pycvx
-```python
 from pycvx import cvxinfo
 
 cvx=cvxinfo()
@@ -20,17 +18,3 @@ print(cvx.calibrations["DEMO_CURVE"])
 # [120.0, 200.0, 320.0, 400.0, 520.0, 600.0, 720.0]
 
 cvx.calibrations["DEMO_CURVE"].show()
-```
-
-![image](/image/DEMO_CURVE.png)
-
-## English
-
-cvx(Calibration Values Exchange Format) is a calibration data format, it's extension is .csv. INCA, CANape and other calibration tool support this.
-
-This repro is a cvx library in python, which is used for read and write cvx file.
-
-## 中文
-cvx（Calibration Values Exchange Format）是一种标定数据格式，后缀是.csv，INCA/CANape等标定工具都支持。
-
-本项目是使用python开发的cvx库，用于读写cvx。
