@@ -20,7 +20,7 @@ print(DEMO_CURVE)
 # value=
 # [120.0, 200.0, 320.0, 400.0, 520.0, 600.0, 720.0]
 
-DEMO_MAP_2 = cvx.getcvxobject("calibrations", "DEMO_MAP_2")
+DEMO_MAP_2 = cvx.getcvxobject("calibration", "DEMO_MAP_2")
 DEMO_MAP_2.show()
 ```
 
