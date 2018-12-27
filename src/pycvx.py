@@ -36,7 +36,7 @@ class cvxobject(function):
 
     def __init__(self, name):
         super().__init__(name)
-        self.value = []
+        self.value = []  # clear value for new instance
 
     def getlabel(self, axis, name, unit):
         if len(name) > 0 and len(unit) > 0:
@@ -51,7 +51,7 @@ class cvxobject(function):
     def __str__(self):
         str = super().__str__() \
               + "\ntype={0}, unit={1}".format(self.type, self.unit) \
-              + "\nvalue\n" + self.value.__str__()
+              + "\nvalue=\n" + self.value.__str__()
         return str
 
 
@@ -84,7 +84,7 @@ class calibration(cvxobject):
                 plt.title(self.name)
                 plt.xlabel(self.getlabel("x", self.x.name, self.x.unit))
                 plt.ylabel(self.getlabel("y", self.name, self.unit))
-                # for i in range(0, len(self.value) - 1):
+                # for i in range(0, len(self.value)):
                 #     plt.text(self.x.value[i], self.value[i], "{0},{1}".format(self.x.value[i], self.value[i]))
                 plt.show()
             elif self.type == "MAP":
@@ -100,26 +100,28 @@ class calibration(cvxobject):
                 p = ax.plot_surface(X, Y, Z, rstride=1, cstride=1, cmap='rainbow')
                 fig.colorbar(p)
                 ax.set_title(self.name)
-                ax.set_xlabel(self.getlabel("x", self.x.name, self.x.unit))
-                ax.set_ylabel(self.getlabel("y", self.y.name, self.y.unit))
+                ax.set_ylabel(self.getlabel("x", self.x.name, self.x.unit))  # exchange for plot
+                ax.set_xlabel(self.getlabel("y", self.y.name, self.y.unit))  # exchange for plot
                 ax.set_zlabel(self.getlabel("z", self.name, self.unit))
                 plt.show()
             elif self.type == "VAL_BLK":
+                if not isDigit(self.value[0]):
+                    return
                 x = range(0, len(self.value) - 1, 1)
                 plt.title(self.name)
                 plt.plot(x, self.value, marker='o')
                 plt.xlabel(self.getlabel("x", "", ""))
                 plt.ylabel(self.getlabel("y", self.name, self.unit))
-                # for i in range(0, len(self.value) - 1):
+                # for i in range(0, len(self.value)):
                 #     plt.text(i, self.value[i], "{0},{1}".format(i, self.value[i]))
                 plt.show()
 
     def __str__(self):
         str = super().__str__()
         if len(self.x.value) > 0:
-            str = str + "\nx\n" + self.x.__str__()
+            str = str + "\naxis x\n" + self.x.__str__()
         if len(self.y.value) > 0:
-            str = str + "\ny\n" + self.y.__str__()
+            str = str + "\naxis y\n" + self.y.__str__()
         return str
 
 
@@ -132,27 +134,38 @@ class cvxinfo:
     functions = {}
     calibrations = {}
     axises = {}
+    cvxobjects = {"functions": functions, "calibrations": calibrations, "axises": axises}
     line_count = 0
 
     def __init__(self):
+        self.functions = {}
+        self.calibrations = {}
+        self.axises = {}
+        self.cvxobjects = {"function": self.functions, "calibration": self.calibrations, "axis": self.axises}
         return
 
     def addfunction(self, fun):
-        if not fun.name in self.functions.keys():
-            self.functions[fun.name] = fun
+        # if not fun.name in self.functions.keys():
+        self.functions[fun.name] = fun
 
     def addcalibration(self, cal):
-        if not cal.name in self.calibrations.keys():
-            self.calibrations[cal.name] = cal
+        # if not cal.name in self.calibrations.keys():
+        self.calibrations[cal.name] = cal
 
     def addaxis(self, ax):
-        if not ax.name in self.axises.keys():
-            self.axises[ax.name] = ax
-            # for cal in self.calibrations:
-            #     if cal.x.name == ax.name:
-            #         cal.x = ax
-            #     if cal.y.name == ax.name:
-            #         cal.y = ax
+        # if not ax.name in self.axises.keys():
+        self.axises[ax.name] = ax
+        # for cal in self.calibrations:
+        #     if cal.x.name == ax.name:
+        #         cal.x = ax
+        #     if cal.y.name == ax.name:
+        #         cal.y = ax
+
+    def getcvxobject(self, type, name):
+        if type in self.cvxobjects.keys() and name in self.cvxobjects[type].keys():
+            return self.cvxobjects[type][name]
+        else:
+            return None
 
     def read(self, cvxfile):
         self.functions.clear()
@@ -200,6 +213,7 @@ class cvxinfo:
                             if isDigit(txt[2]):
                                 cal.value = [float(txt[2])]
                             else:
+                                cal.type = "ASCII"  # ASCII
                                 cal.value = [txt[2]]
                         elif txt[0] == "CURVE":
                             if len(txt) > 1 and len(txt[1]) > 0:
